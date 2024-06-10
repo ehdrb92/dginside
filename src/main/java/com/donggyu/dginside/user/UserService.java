@@ -2,7 +2,6 @@ package com.donggyu.dginside.user;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +12,6 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User createUser(UserJoinDTO userJoinDTO) {
-            boolean isExistUser = userRepository.existsByUsername(userJoinDTO.getUsername());
-
-            if (isExistUser) {
-                throw new DataIntegrityViolationException("Username Dulicate");
-            }
-
             String encodedPassword = bCryptPasswordEncoder.encode(userJoinDTO.getPassword());
 
             User newUser = new User();
