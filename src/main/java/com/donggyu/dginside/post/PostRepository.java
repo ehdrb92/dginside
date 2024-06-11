@@ -13,5 +13,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Transactional
     @Query("Update posts p SET p.title = :title, p.category = :category, p.contents = :contents, p.attachedFile = :attachedFile WHERE p.id = :id")
-    int updatePostById(Long id, String title, String Category, String contents, List<String> attachedFile);
+    int updatePostById(Long id, String title, String category, String contents, List<String> attachedFile);
 }

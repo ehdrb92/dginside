@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Modifying
     @Transactional
-    @Query("Update comments c SET p.contents = :contents WHERE p.id = :id")
+    @Query("Update comments c SET c.contents = :contents WHERE c.id = :id")
     int updateCommentById(Long id, String contents);
 }
