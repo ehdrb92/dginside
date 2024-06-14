@@ -12,15 +12,16 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User createUser(UserJoinDTO userJoinDTO) {
-            String encodedPassword = bCryptPasswordEncoder.encode(userJoinDTO.getPassword());
-
             User newUser = new User();
+
+            String encodedPassword = bCryptPasswordEncoder.encode(userJoinDTO.getPassword());
 
             newUser.setUsername(userJoinDTO.getUsername());
             newUser.setPassword(encodedPassword);
             newUser.setName(userJoinDTO.getName());
             newUser.setEmail(userJoinDTO.getEmail());
             newUser.setNickname(userJoinDTO.getNickname());
+            newUser.setRole("ROLE_USER");
 
             return userRepository.save(newUser);
     }

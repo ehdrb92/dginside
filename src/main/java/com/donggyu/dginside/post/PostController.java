@@ -12,7 +12,7 @@ public class PostController {
     private PostService postService;
 
     @PostMapping
-    public ResponseEntity<?> createPost(PostCreateDTO postCreateDTO) {
+    public ResponseEntity<?> createPost(@RequestBody PostCreateDTO postCreateDTO) {
         return new ResponseEntity<>(postService.createPost(postCreateDTO), HttpStatus.CREATED);
     }
 
@@ -27,7 +27,7 @@ public class PostController {
     }
 
     @PatchMapping(path = "/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable(value = "id") Long id, PostUpdateDTO postUpdateDTO) {
+    public ResponseEntity<?> updatePost(@PathVariable(value = "id") Long id, @RequestBody PostUpdateDTO postUpdateDTO) {
         return new ResponseEntity<>(postService.updatePost(id, postUpdateDTO), HttpStatus.OK);
     }
 

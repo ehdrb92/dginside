@@ -12,7 +12,7 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<?> createComment(CommentCreateDTO commentCreateDTO) {
+    public ResponseEntity<?> createComment(@RequestBody CommentCreateDTO commentCreateDTO) {
         return new ResponseEntity<>(commentService.createComment(commentCreateDTO), HttpStatus.CREATED);
     }
 
@@ -27,7 +27,7 @@ public class CommentController {
     }
 
     @PatchMapping(path = "/{id}")
-    public ResponseEntity<?> updatePost(@PathVariable(value = "id") Long id, CommentUpdateDTO commentUpdateDTO) {
+    public ResponseEntity<?> updatePost(@PathVariable(value = "id") Long id, @RequestBody CommentUpdateDTO commentUpdateDTO) {
         return new ResponseEntity<>(commentService.updateComment(id, commentUpdateDTO), HttpStatus.OK);
     }
 

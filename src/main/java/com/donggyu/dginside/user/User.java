@@ -4,6 +4,7 @@ import com.donggyu.dginside.post.Post;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
@@ -31,6 +32,10 @@ public class User {
 
     @Column(name = "nickname", nullable = false, length = 255)
     private String nickname;
+
+    @Column(name = "role", nullable = false, length = 10)
+    @ColumnDefault("'ROLE_USER'")
+    private String role;
 
     @Column(name = "created_at", nullable = false)
     @CreationTimestamp
