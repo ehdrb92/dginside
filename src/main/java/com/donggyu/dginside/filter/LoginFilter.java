@@ -1,14 +1,21 @@
 package com.donggyu.dginside.filter;
 
+import com.donggyu.dginside.user.CustomUserDetails;
+import com.donggyu.dginside.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 
 /*
@@ -19,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException {
@@ -32,11 +40,23 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected void successfulAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain, Authentication authentication) {
+        // TODO: 왜 클래스 캐스팅을 해야 하는지?
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
+        String username = customUserDetails.getUsername();
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+        GrantedAuthority authority = iterator.next();
+
+        String role = authority.getAuthority();
+        String token = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
+
+        httpServletResponse.addHeader("Authorization", "Bearer " + token);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException authenticationException) {
-
+        httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
     }
 }

@@ -1,6 +1,7 @@
 package com.donggyu.dginside.config;
 
 import com.donggyu.dginside.filter.LoginFilter;
+import com.donggyu.dginside.util.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
+    private final JwtUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -29,11 +31,11 @@ public class SecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/user/join", "/user/login").permitAll()
+                        .requestMatchers("/user/join", "/login").permitAll()
                         .anyRequest().authenticated()
                 );
 
-        httpSecurity.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         httpSecurity.sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
