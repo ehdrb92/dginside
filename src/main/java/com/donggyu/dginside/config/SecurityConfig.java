@@ -1,5 +1,6 @@
 package com.donggyu.dginside.config;
 
+import com.donggyu.dginside.filter.JwtFilter;
 import com.donggyu.dginside.filter.LoginFilter;
 import com.donggyu.dginside.util.JwtUtil;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,17 +25,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf((auth) -> auth.disable()); // JWT를 이용하기 때문에 CSRF 방어 불필요
+        httpSecurity.csrf(AbstractHttpConfigurer::disable); // JWT를 이용하기 때문에 CSRF 방어 불필요
 
-        httpSecurity.formLogin((auth) -> auth.disable()); // Form 로그인 불필요
+        httpSecurity.formLogin(AbstractHttpConfigurer::disable); // Form 로그인 불필요
 
-        httpSecurity.httpBasic((auth) -> auth.disable()); // HTTP Basic 인증 불필요
+        httpSecurity.httpBasic(AbstractHttpConfigurer::disable); // HTTP Basic 인증 불필요
 
         httpSecurity
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/user/join", "/login").permitAll()
                         .anyRequest().authenticated()
                 );
+
+        httpSecurity
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class);
 
         httpSecurity.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
