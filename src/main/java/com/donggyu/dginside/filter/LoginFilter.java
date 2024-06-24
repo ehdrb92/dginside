@@ -5,7 +5,6 @@ import com.donggyu.dginside.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,10 +22,15 @@ import java.util.Iterator;
 *
 * JWT를 사용하면 폼 로그인 방식을 사용하지않으므로 해당 방식을 비활성화하였고, 해당 필터를 상속하여 대체할 필터를 생성한다.
 * */
-@AllArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
+
+    public LoginFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        setFilterProcessesUrl("/api/user/login"); // spring security 기본값에 해당하는 "/login"을 변경
+    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException {

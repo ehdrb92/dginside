@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(path = "/user")
+@RequestMapping(path = "/api/user")
 public class UserController {
     private UserService userService;
 
@@ -15,8 +15,6 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody UserJoinDTO userJoinDTO) {
         return new ResponseEntity<>(userService.createUser(userJoinDTO), HttpStatus.CREATED);
     }
-
-    // TODO: 로그인 API 추가 필요
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getUser(@PathVariable(value = "id") Long id) {

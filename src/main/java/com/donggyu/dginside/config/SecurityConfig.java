@@ -33,7 +33,7 @@ public class SecurityConfig {
 
         httpSecurity
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/user/join", "/login").permitAll()
+                        .requestMatchers("/api/user/join", "/api/user/login").permitAll()
                         .anyRequest().authenticated()
                 );
 
