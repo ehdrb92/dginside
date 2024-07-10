@@ -15,7 +15,6 @@ public class PostService {
         newPost.setTitle(postCreateDTO.getTitle());
         newPost.setCategory(postCreateDTO.getCategory());
         newPost.setContents(postCreateDTO.getContents());
-        newPost.setAttachedFile(postCreateDTO.getAttachedFile());
 
         return postRepository.save(newPost);
     }

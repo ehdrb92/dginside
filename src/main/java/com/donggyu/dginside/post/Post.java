@@ -29,9 +29,6 @@ public class Post {
     @Column(name = "contents", nullable = false, columnDefinition = "TEXT")
     private String contents;
 
-    @Column(name = "attachedFile", nullable = true, columnDefinition = "JSON")
-    private List<String> attachedFile;
-
     @Column(name = "likes", nullable = false, columnDefinition = "INT DEFAULT 0")
     private Integer likes;
 
